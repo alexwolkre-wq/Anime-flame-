@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Flame 🔥 - عالم الأنمي المشتعل</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; background-color: #080a10; color: white; margin: 0; overflow-x: hidden; }
+        .flame-text { background: linear-gradient(90deg, #ff4d4d, #f9cb28); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; }
+        .glass-nav { background: rgba(13, 17, 26, 0.95); backdrop-filter: blur(10px); border-b: 2px solid #ff4d4d; box-shadow: 0 4px 20px rgba(255, 77, 77, 0.2); }
+        .anime-card { transition: all 0.4s ease; cursor: pointer; border: 1px solid #1a1e29; }
+        .anime-card:hover { transform: translateY(-10px) scale(1.02); border-color: #ff4d4d; box-shadow: 0 10px 30px rgba(255, 77, 77, 0.3); }
+        .anime-card img { height: 350px; object-cover: cover; width: 100%; }
+        .hidden-room { display: none; opacity: 0; transform: translateY(20px); transition: all 0.5s ease; }
+        .visible-room { display: block; opacity: 1; transform: translateY(0); }
+        .server-btn.active { background: linear-gradient(45deg, #ff4d4d, #f9cb28); border-color: transparent; color: black; font-weight: bold; }
+        iframe { border-radius: 12px; border: 2px solid #1a1e29; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
+        /* تحسينات للهاتف */
+        @media (max-width: 768px) { .anime-card img { height: 250px; } .text-3xl { font-size: 1.5rem; } }
+    </style>
+</head>
+<body>
+
+    <nav class="glass-nav sticky top-0 z-50 p-4 flex justify-between items-center">
+        <h1 class="text-3xl flame-text tracking-tighter">ANIME FLAME 🔥</h1>
+        <button onclick="showHome()" class="bg-red-600 hover:bg-red-700 px-6 py-2 rounded-full text-sm font-bold transition flex items-center gap-2">
+            🏠 الرئيسية
+        </button>
+    </nav>
+
+    <div id="home-page" class="p-4 md:p-10 animate-fade-in">
+        <div class="flex items-center gap-4 mb-10 border-r-4 border-red-600 pr-4">
+            <h2 class="text-3xl font-bold">أحدث الأنميات المضافة</h2>
+            <span class="text-xs bg-red-950 text-red-300 px-3 py-1 rounded-full font-mono">30 ITEMS</span>
+        </div>
+        
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6" id="anime-grid">
+            </div>
+    </div>
+
+    <div id="watch-room" class="hidden-room p-4 md:p-8">
+        <div class="max-w-6xl mx-auto">
+            <button onclick="showHome()" class="mb-6 text-red-400 font-bold hover:text-red-300 transition flex items-center gap-2">
+                ← العودة للقائمة الرئيسية
+            </button>
+            
+            <div class="flex flex-col md:flex-row gap-8 mb-10 items-center bg-slate-950 p-6 rounded-2xl border border-slate-800 shadow-xl">
+                <img id="room-anime-img" src="" alt="" class="w-40 h-60 rounded-lg object-cover border-4 border-slate-800 shadow-lg">
+                <div class="text-center md:text-right">
+                    <h2 id="current-anime-title" class="text-4xl md:text-5xl font-black mb-2 flame-text">اسم الأنمي</h2>
+                    <p class="text-slate-400 mb-4">TV Series | HD | التصنيف: أكشن، مغامرة</p>
+                    <span class="bg-red-600 text-white px-4 py-1 rounded-full text-sm font-bold">الحلقة 1</span>
+                </div>
+            </div>
+
+            <div class="bg-slate-950 p-4 md:p-6 rounded-3xl border border-slate-800 shadow-2xl relative">
+                <h3 class="text-lg text-center text-red-300 mb-4 font-bold">🎬 مشغل الحلقة</h3>
+                <div class="aspect-video w-full mb-6 relative">
+                    <iframe id="video-player" class="absolute inset-0 w-full h-full" src="https://www.youtube.com/embed/S2p_S_3Fidk" frameborder="0" allowfullscreen></iframe>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 pt-6 border-t border-slate-800">
+                    <div class="bg-slate-900 p-5 rounded-xl border border-slate-700 text-center">
+                        <p class="text-slate-400 text-sm mb-4 font-bold">اختر سيرفر المشاهدة</p>
+                        <div class="flex flex-wrap gap-2 justify-center">
+                            <button onclick="changeServer('S1')" class="server-btn bg-slate-800 px-5 py-2 rounded-lg hover:border-red-500 border border-transparent transition text-sm active">Server 1</button>
+                            <button onclick="changeServer('S2')" class="server-btn bg-slate-800 px-5 py-2 rounded-lg hover:border-red-500 border border-transparent transition text-sm">Server 2</button>
+                            <button onclick="changeServer('GD')" class="server-btn bg-slate-800 px-5 py-2 rounded-lg hover:border-red-500 border border-transparent transition text-sm flex items-center gap-1">🌐 Drive</button>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-slate-900 p-5 rounded-xl border border-slate-700 text-center flex flex-col justify-center items-center gap-4">
+                        <div class="flex gap-2 items-center">
+                            <label class="text-sm text-slate-400">الجودة:</label>
+                            <select class="bg-slate-800 p-2 rounded-lg text-sm outline-none border border-red-500 text-white font-bold cursor-pointer">
+                                <option>1080p (FHD)</option>
+                                <option>720p (HD)</option>
+                                <option>480p (SD)</option>
+                            </select>
+                        </div>
+                        <a id="download-btn" href="#" class="bg-green-600 hover:bg-green-700 px-10 py-3 rounded-xl font-black text-lg flex items-center gap-3 transition transform hover:scale-105 shadow-lg w-full justify-center">
+                            📥 تحميل الحلقة (Direct)
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 bg-slate-950 p-6 rounded-2xl border border-slate-800">
+                <h3 class="text-2xl font-bold mb-6 text-red-300">قائمة الحلقات:</h3>
+                <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-10 gap-3">
+                    <button class="bg-red-600 p-3 rounded-lg font-black text-xl shadow-lg transform scale-110">1</button>
+                    <button class="bg-slate-800 p-3 rounded-lg font-bold hover:bg-red-500 transition">2</button>
+                    <button class="bg-slate-800 p-3 rounded-lg font-bold hover:bg-red-500 transition">3</button>
+                    <button class="bg-slate-800 p-3 rounded-lg font-bold hover:bg-red-500 transition text-slate-600">4</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="p-12 text-center text-slate-700 border-t border-slate-950 mt-20 bg-slate-950">
+        <p class="text-2xl flame-text font-black mb-3">ANIME FLAME 🔥</p>
+        <p class="text-sm">Copyright © 2026 - Designed by Ahmed for Anime Fans</p>
+        <p class="text-xs text-slate-800 mt-2">All images are from TMDB API.</p>
+    </footer>
+
+    <script>
+        // قاعدة بيانات الـ 30 أنمي بصور HD وروابط مشغل حقيقية (مثال)
+        const animeData = [
+            { id: 1, title: "Solo Leveling", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/geu7vSxa775m7vwwk9An98v9S0p.jpg", video: "https://www.youtube.com/embed/S2p_S_3Fidk" },
+            { id: 2, title: "One Piece", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/fcidS68ki2hZSTjvPm962XvYv9V.jpg", video: "https://www.youtube.com/embed/MCb138zL_v0" },
+            { id: 3, title: "Attack on Titan", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/h619Y99yL6I46mZ8Tof6pG6L6E.jpg", video: "https://www.youtube.com/embed/MGRm4IzK1SQ" },
+            { id: 4, title: "Death Note", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/tC7vYpS88S8S0KIDf9p9uCXK0p.jpg", video: "https://www.youtube.com/embed/NlJZ-YgAt-c" },
+            { id: 5, title: "Demon Slayer", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/xUfRjDe2Yv9S0KIDf9p9uCXK0p.jpg", video: "https://www.youtube.com/embed/VQGCKyvzIM4" },
+            { id: 6, title: "Hunter x Hunter", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/3697S68ki2hZSTjvPm962XvYv9V.jpg", video: "https://www.youtube.com/embed/d6kBeJjWVnY" },
+            { id: 7, title: "Jujutsu Kaisen", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/g1997ce1-e799-4836-9127-dd5da6fbb58a.jpg", video: "https://www.youtube.com/embed/hwp-Z9vX6vY" },
+            { id: 8, title: "Naruto Shippuden", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/2v9S68ki2hZSTjvPm962XvYv9V.jpg", video: "https://www.youtube.com/embed/1997ce1-e799" },
+            { id: 9, title: "Dragon Ball Super", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/9pXm8An98v9S0KIDf9p9uCXK0p.jpg", video: "https://www.youtube.com/embed/T6T_A0X0X4w" },
+            { id: 10, title: "Bleach", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/697S68ki2hZSTjvPm962XvYv9V.jpg", video: "https://www.youtube.com/embed/3vM-kC698E" },
+            { id: 11, title: "My Hero Academia", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/4v8S68ki2hZSTjvPm962XvYv9V.jpg", video: "#" },
+            { id: 12, title: "Tokyo Ghoul", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/5697S68ki2hZSTjvPm962XvYv9V.jpg", video: "#" },
+            { id: 13, title: "Fullmetal Alchemist", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/6v9S68ki2hZSTjvPm962XvYv9V.jpg", video: "#" },
+            { id: 14, title: "Code Geass", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/7pXm8An98v9S0KIDf9p9uCXK0p.jpg", video: "#" },
+            { id: 15, title: "Steins;Gate", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/8697S68ki2hZSTjvPm962XvYv9V.jpg", video: "#" },
+            { id: 16, title: "Dr. Stone", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/9v8S68ki2hZSTjvPm962XvYv9V.jpg", video: "#" },
+            { id: 17, title: "Vinland Saga", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/1v9S68ki2hZSTjvPm962XvYv9V.jpg", video: "#" },
+            { id: 18, title: "ChainSaw Man", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/2pXm8An98v9S0KIDf9p9uCXK0p.jpg", video: "#" },
+            { id: 19, title: "Spy x Family", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/3v9S68ki2hZSTjvPm962XvYv9V.jpg", video: "#" },
+            { id: 20, title: "Cyberpunk Edgerunners", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/4697S68ki2hZSTjvPm962XvYv9V.jpg", video: "#" },
+            { id: 21, title: "Naruto", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/5pXm8An98v9S0KIDf9p9uCXK0p.jpg", video: "#" },
+            { id: 22, title: "Re:Zero", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/6v9S68ki2hZSTjvPm962XvYv9V.jpg", video: "#" },
+            { id: 23, title: "The Rising of Shield Hero", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/7pXm8An98v9S0KIDf9p9uCXK0p.jpg", video: "#" },
+            { id: 24, title: "Mob Psycho 100", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/8697S68ki2hZSTjvPm962XvYv9V.jpg", video: "#" },
+            { id: 25, title: "Kiseijuu (Parasyte)", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/9pXm8An98v9S0KIDf9p9uCXK0p.jpg", video: "#" },
+            { id: 26, title: "Haikyuu!!", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/1v9S68ki2hZSTjvPm962XvYv9V.jpg", video: "#" },
+            { id: 27, title: "Fire Force", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/2v9S68ki2hZSTjvPm962XvYv9V.jpg", video: "#" },
+            { id: 28, title: "Black Clover", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/3697S68ki2hZSTjvPm962XvYv9V.jpg", video: "#" },
+            { id: 29, title: "Overlord", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/4v8S68ki2hZSTjvPm962XvYv9V.jpg", video: "#" },
+            { id: 30, title: "Danganronpa", img: "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/5697S68ki2hZSTjvPm962XvYv9V.jpg", video: "#" },
+        ];
+
+        const grid = document.getElementById('anime-grid');
+
+        // إنشاء كروت الأنمي الـ 30 تلقائياً
+        animeData.forEach(anime => {
+            const card = document.createElement('div');
+            card.className = "anime-card bg-slate-950 rounded-2xl overflow-hidden shadow-lg border border-slate-900";
+            card.onclick = () => openWatchRoom(anime);
+            card.innerHTML = `
+                <img src="${anime.img}" alt="${anime.title}">
+                <div class="p-4 text-center">
+                    <h3 class="font-bold text-lg truncate mb-1">${anime.title}</h3>
+                    <div class="text-xs text-red-400 font-bold bg-red-950 px-2 py-1 rounded-full inline-block">مشاهدة الآن 🔥</div>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+
+        // دوال نظام غرف المشاهدة
+        function openWatchRoom(anime) {
+            document.getElementById('home-page').classList.add('hidden-room');
+            document.getElementById('watch-room').classList.add('visible-room');
+            document.getElementById('watch-room').classList.remove('hidden-room');
+            
+            // تحديث بيانات الغرفة
+            document.getElementById('current-anime-title').innerText = anime.title;
+            document.getElementById('room-anime-img').src = anime.img;
+            document.getElementById('room-anime-img').alt = anime.title;
+            
+            // تشغيل مشغل الفيديو (تم وضع رابط يوتيوب تجريبي، عليك وضع رابط .mp4 حقيقي لاحقاً)
+            document.getElementById('video-player').src = anime.video;
+            window.scrollTo(0, 0);
+        }
+
+        function showHome() {
+            document.getElementById('home-page').classList.remove('hidden-room');
+            document.getElementById('watch-room').classList.add('hidden-room');
+            document.getElementById('watch-room').classList.remove('visible-room');
+            
+            // إيقاف الفيديو عند العودة
+            document.getElementById('video-player').src = "";
+        }
+
+        // دوال التحكم باللون الأحمر للسيرفرات
+        function changeServer(name) {
+            alert("جارٍ التبديل إلى " + name + "... (يجب وضع رابط الحلقة الحقيقي في الكود لاحقاً)");
+            const btns = document.querySelectorAll('.server-btn');
+            btns.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+                                                                  </html>
